@@ -13,7 +13,7 @@ const db = mysql.createConnection(
 );
 
 // gets db action from user
-function main () {
+function main() {
   inquirer.prompt([
     {
       type: "list",
@@ -37,10 +37,15 @@ function main () {
       viewAllDepartments();
     }
 
+    // handle view all roles
+    if (answer.dbAction === "View all roles") {
+      viewAllRoles();
+    }
+
   });
 }
 
-// view all departments
+// gets all departments in db
 function viewAllDepartments() {
   db.query("SELECT id AS 'department id', name AS 'department name' FROM department", function (err, results) {
     if (err) {
@@ -48,16 +53,29 @@ function viewAllDepartments() {
       console.log(`\x1b[97;104m%s\x1b[0m`, `\n** Something went wrong, please try again **`)
     } else {
       // pretty print results
-      console.log(`\x1b[97;42;1m%s\x1b[0m`, `\nSuccess:`)
+      console.log(`\x1b[97;42;1m%s\x1b[0m`, `Success:`)
       console.table(results);
     }
-
     main();
-
   });
 }
 
-// runs the app
+// gets all roles in db
+function viewAllRoles() {
+  db.query("select r.title as 'job title', r.id as 'role id', d.name as 'department',r.salary from role r join department d on r.department_id = d.id", function (err, results) {
+    if (err) {
+      console.log(err);
+      console.log(`\x1b[97;104m%s\x1b[0m`, `\n** Something went wrong, please try again **`)
+    } else {
+      // pretty print results
+      console.log(`\x1b[97;42;1m%s\x1b[0m`, `Success:`)
+      console.table(results);
+    }
+    main(); 
+  });
+}
+
+// welcomes user and runs app
 function init() {
   console.log("\x1b[95m%s\x1b[0m", "\n/// Welcome to the employee management system! ///\n");
   main();
