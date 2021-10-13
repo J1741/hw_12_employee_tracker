@@ -12,15 +12,6 @@ const db = mysql.createConnection(
   }
 );
 
-// handle error, acknowledge connection
-db.connect((err) => {
-  if (err) {
-    console.error("Error connecting to database:", err.stack);
-    return;
-  }
-  console.log("** Database connection successful **");
-});
-
 // gets db action from user
 function main () {
   inquirer.prompt([
@@ -51,15 +42,16 @@ function main () {
 
 // view all departments
 function viewAllDepartments() {
-  db.query("SELECT id as 'department id',name as 'department name' FROM department", function (err, results) {
-    //
+  db.query("SELECT id AS 'department id', name AS 'department name' FROM department", function (err, results) {
     if (err) {
       console.log(err);
+      console.log(`\x1b[97;104m%s\x1b[0m`, `\n** Something went wrong, please try again **`)
+    } else {
+      // pretty print results
+      console.log(`\x1b[97;42;1m%s\x1b[0m`, `\nSuccess:`)
+      console.table(results);
     }
-    console.log(`\x1b[97;42m%s\x1b[0m`, `\nSuccess:`)
-    console.table(results);
 
-    // return to main menu
     main();
 
   });
