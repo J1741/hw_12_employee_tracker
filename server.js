@@ -15,10 +15,10 @@ const db = mysql.createConnection(
 // handle error, acknowledge connection
 db.connect((err) => {
   if (err) {
-    console.error("Error connecting:", err.stack);
+    console.error("Error connecting to database:", err.stack);
     return;
   }
-  console.log("** Connected to employee_management_db **");
+  console.log("** Database connection successful **");
 });
 
 // gets db action from user
@@ -27,7 +27,7 @@ function main () {
     {
       type: "list",
       name: "dbAction",
-      message: "Welcome to the employee management system! What would you like to do?",
+      message: "Please select one of the following options:",
       choices: [
         "View all departments",
         "View all roles",
@@ -40,7 +40,6 @@ function main () {
       ], 
     }
   ]).then((answer) => {
-    console.log("\x1b[36m%s\x1b[0m", `\n** Selected action: ${answer.dbAction} **\n`);
    
     // handle view all departments
     if (answer.dbAction === "View all departments") {
@@ -52,17 +51,23 @@ function main () {
 
 // view all departments
 function viewAllDepartments() {
-  db.query("SELECT id,name FROM department", function (err, results) {
+  db.query("SELECT id as 'department id',name as 'department name' FROM department", function (err, results) {
+    //
     if (err) {
       console.log(err);
     }
+    console.log(`\x1b[97;42m%s\x1b[0m`, `\nSuccess:`)
     console.table(results);
+
+    // return to main menu
     main();
+
   });
 }
 
 // runs the app
 function init() {
+  console.log("\x1b[95m%s\x1b[0m", "\n/// Welcome to the employee management system! ///\n");
   main();
 }
 
