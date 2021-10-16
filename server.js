@@ -52,7 +52,11 @@ function main() {
     if (answer.dbAction === "Add a department") {
       addNewDepartment();
     }
+
     // handle add role
+    if (answer.dbAction === "Add a role") {
+      addNewRole();
+    }
     // handle add an employee
     // handle update an employee role
 
@@ -77,7 +81,7 @@ function viewAllDepartments() {
 
 // gets all roles in db
 function viewAllRoles() {
-  db.query("SELECT r.title AS 'job title', r.id AS 'role id', d.name AS 'department',r.salary FROM role r JOIN department d ON r.department_id = d.id", function (err, results) {
+  db.query("SELECT r.title AS 'job title', r.id AS 'role id', d.name AS 'department',r.salary FROM role r LEFT OUTER JOIN department d ON r.department_id = d.id", function (err, results) {
     // handle error
     if (err) {
       console.log(err);
@@ -110,6 +114,7 @@ function viewAllEmployees() {
 // adds a new department to db
 function addNewDepartment() {
   console.log("\n ** IN addNewDepartment function **\n");
+  // get new dept info
   inquirer.prompt([
     {
       type: "input",
@@ -117,7 +122,6 @@ function addNewDepartment() {
       message: "Please enter a name for the new department:",
     }
   ]).then(answer => {
-    console.log("\n ** New Department name:", answer, "\n");
     // add new department to db
     db.query(`INSERT INTO department (name) VALUES('${answer.newDept}')`, function (err, results) {
       // handle error
@@ -125,7 +129,7 @@ function addNewDepartment() {
         console.log(err);
         console.log(`\x1b[93;104m%s\x1b[0m`, `\n** Something went wrong, please try again **`)
       } else {
-        // pretty print results
+        // pretty print confirmation
         console.log(`\x1b[93;42;1m%s\x1b[0m`, `Success!`)
         console.log(`\x1b[92m%s\x1b[0m`, `New department added to database:\n - name: ${answer.newDept}\n - id: ${results.insertId}\n`);
         main();
@@ -135,6 +139,37 @@ function addNewDepartment() {
 }
 
 // adds a new role to db
+function addNewRole() {
+  console.log("\n ** IN addNewRole function **\n");
+  // get new role info
+  inquirer.prompt([
+    {
+      type: "input",
+      name: "newRoleTitle",
+      message: "Please enter a title for the new role:",
+    },
+    {
+      type: "input",
+      name: "newRoleSalary",
+      message: "Please enter a salary for the new role:",
+    }
+  ]).then(answer => {
+    // add new role to db
+    db.query(`INSERT INTO role (title, salary) VALUES('${answer.newRoleTitle}', ${answer.newRoleSalary})`, function (err, results) {
+      // handle error
+      if (err) {
+        console.log(err);
+        console.log(`\x1b[93;104m%s\x1b[0m`, `\n** Something went wrong, please try again **`)
+      } else {
+        // pretty print confirmation
+        console.log(`\x1b[93;42;1m%s\x1b[0m`, `Success!`)
+        console.log(results);
+        main();
+      }
+    })
+  });
+}
+
 // adds an employee to db
 // updates an employee role in db
 
