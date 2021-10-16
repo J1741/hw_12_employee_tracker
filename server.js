@@ -31,6 +31,7 @@ function main() {
       ], 
     }
   ]).then((answer) => {
+    console.log("dbAction is:", answer);
    
     // handle view all departments
     if (answer.dbAction === "View all departments") {
@@ -48,6 +49,9 @@ function main() {
     }
 
     // handle add a department
+    if (answer.dbAction === "Add a department") {
+      addNewDepartment();
+    }
     // handle add role
     // handle add an employee
     // handle update an employee role
@@ -89,7 +93,7 @@ function viewAllRoles() {
 
 // gets all employees in db
 function viewAllEmployees() {
-  db.query("SELECT ea.id,ea.first_name,ea.last_name,CONCAT(eb.first_name, ' ', eb.last_name) AS 'manager' FROM employee ea LEFT OUTER JOIN employee eb ON ea.manager_id = eb.id", function (err, results) {
+  db.query("SELECT ea.id AS 'employee id', ea.first_name AS 'first name', ea.last_name AS 'last name', r.title AS 'job title', d.name AS 'department', r.salary, CONCAT(eb.first_name, ' ', eb.last_name) AS 'manager' FROM employee ea LEFT OUTER JOIN employee eb ON ea.manager_id = eb.id JOIN role r ON ea.role_id=r.id JOIN department d ON d.id=r.department_id", function (err, results) {
     // handle error
     if (err) {
       console.log(err);
@@ -104,6 +108,21 @@ function viewAllEmployees() {
 }
 
 // adds a new department to db
+function addNewDepartment() {
+  console.log("\n ** IN addNewDepartment function **\n");
+  inquirer.prompt([
+    {
+      type: "input",
+      name: "newDept",
+      message: "Please enter a name for the new department:",
+    }
+  ]).then(answer => {
+    console.log("\n ** New Department name:", answer, "\n");
+    main();
+  });
+
+}
+
 // adds a new role to db
 // adds an employee to db
 // updates an employee role in db
