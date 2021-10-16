@@ -118,9 +118,20 @@ function addNewDepartment() {
     }
   ]).then(answer => {
     console.log("\n ** New Department name:", answer, "\n");
-    main();
+    // add new department to db
+    db.query(`INSERT INTO department (name) VALUES('${answer.newDept}')`, function (err, results) {
+      // handle error
+      if (err) {
+        console.log(err);
+        console.log(`\x1b[93;104m%s\x1b[0m`, `\n** Something went wrong, please try again **`)
+      } else {
+        // pretty print results
+        console.log(`\x1b[93;42;1m%s\x1b[0m`, `Success!`)
+        console.log(`\x1b[92m%s\x1b[0m`, `New department added to database:\n - name: ${answer.newDept}\n - id: ${results.insertId}\n`);
+        main();
+      }
+    })
   });
-
 }
 
 // adds a new role to db
