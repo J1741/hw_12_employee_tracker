@@ -57,6 +57,7 @@ function main() {
     if (answer.dbAction === "Add a role") {
       addNewRole();
     }
+
     // handle add an employee
     // handle update an employee role
 
@@ -69,7 +70,8 @@ function viewAllDepartments() {
     // handle error
     if (err) {
       console.log(err);
-      console.log(`\x1b[93;104m%s\x1b[0m`, `\n** Something went wrong, please try again **`)
+      console.log(`\x1b[93;41m%s\x1b[0m`, `\n** Something went wrong, please try again **`);
+      main();
     } else {
       // pretty print results
       console.log(`\x1b[93;42;1m%s\x1b[0m`, `Success:`)
@@ -85,7 +87,8 @@ function viewAllRoles() {
     // handle error
     if (err) {
       console.log(err);
-      console.log(`\x1b[93;104m%s\x1b[0m`, `\n** Something went wrong, please try again **`)
+      console.log(`\x1b[93;41m%s\x1b[0m`, `\n** Something went wrong, please try again **`);
+      main();
     } else {
       // pretty print results
       console.log(`\x1b[93;42;1m%s\x1b[0m`, `Success:`)
@@ -101,7 +104,8 @@ function viewAllEmployees() {
     // handle error
     if (err) {
       console.log(err);
-      console.log(`\x1b[93;104m%s\x1b[0m`, `\n** Something went wrong, please try again **`)
+      console.log(`\x1b[93;41m%s\x1b[0m`, `\n** Something went wrong, please try again **`);
+      main();
     } else {
       // pretty print results
       console.log(`\x1b[93;42;1m%s\x1b[0m`, `Success:`)
@@ -127,7 +131,8 @@ function addNewDepartment() {
       // handle error
       if (err) {
         console.log(err);
-        console.log(`\x1b[93;104m%s\x1b[0m`, `\n** Something went wrong, please try again **`)
+        console.log(`\x1b[93;41m%s\x1b[0m`, `\n** Something went wrong, please try again **`);
+        main();
       } else {
         // pretty print confirmation
         console.log(`\x1b[93;42;1m%s\x1b[0m`, `Success!`)
@@ -159,9 +164,10 @@ function addNewRole() {
       // handle error
       if (err) {
         console.log(err);
-        console.log(`\x1b[93;104m%s\x1b[0m`, `\n** Something went wrong, please try again **`)
+        console.log(`\x1b[93;41m%s\x1b[0m`, `\n** Something went wrong, please try again **`);
+        main();
       } else {
-        // pretty print confirmation
+        // pretty print results
         console.log(`\x1b[93;42;1m%s\x1b[0m`, `Success!`)
         console.log(results);
         main();
@@ -175,7 +181,7 @@ function addNewRole() {
 
 // welcomes user and runs app
 function init() {
-  console.log("\x1b[95m%s\x1b[0m", "\n/// Welcome to the employee management system! ///\n");
+  console.log("\x1b[93;104m%s\x1b[0m", "\n/// Welcome to the employee management system! ///\n");
   main();
 }
 
