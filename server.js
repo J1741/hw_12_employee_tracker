@@ -136,7 +136,7 @@ function addNewDepartment() {
         console.log(`\x1b[93;41m%s\x1b[0m`, `\n** Something went wrong, please try again **`);
         main();
       } else {
-        // pretty print confirmation
+        // pretty print results
         console.log(`\x1b[93;42;1m%s\x1b[0m`, `Success!`)
         console.log(`\x1b[92m%s\x1b[0m`, `New department added to database:\n - name: ${answer.newDept}\n - id: ${results.insertId}\n`);
         main();
@@ -167,18 +167,19 @@ function addNewRole() {
       choices: getCurrentDepartments(),
     }
   ]).then(answer => {
-    // ** check department name provided by user **
-    console.log("** department name is: **", answer.newRoleDepartmentName);
-   
-    // REFACTORING ATTEMPT #2D
-    // - trying to do add dept id
+  
+    // add new role to db
+    // promisify to allow .then method and .then chaining
     db.promise().query(`SELECT id FROM department WHERE name='${answer.newRoleDepartmentName}'`).then(result =>
+      // insert new role
       {db.promise().query(`INSERT INTO role (title, salary, department_id) VALUES('${answer.newRoleTitle}', ${answer.newRoleSalary}, ${result[0][0].id})`).then(result =>
+        // pretty print results
         {
-          console.log('Refactor #2D');
           console.log(`\x1b[93;42;1m%s\x1b[0m`, `Success!`);
+          console.log(`\x1b[92m%s\x1b[0m`, `New role added to database:\n - title: ${answer.newRoleTitle}\n - salary: ${answer.newRoleSalary}\n - id: ${result[0].insertId}\n`)
           main();
-        })
+        }
+      )
     })
   });
 }
