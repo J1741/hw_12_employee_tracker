@@ -176,6 +176,7 @@ function addNewRole() {
       {db.promise().query(`INSERT INTO role (title, salary, department_id) VALUES('${answer.newRoleTitle}', ${answer.newRoleSalary}, ${result[0][0].id})`).then(result =>
         {
           console.log('Refactor #2D');
+          console.log(`\x1b[93;42;1m%s\x1b[0m`, `Success!`);
           main();
         })
     })
