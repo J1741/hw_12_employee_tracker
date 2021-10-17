@@ -162,13 +162,30 @@ function addNewRole() {
     },
     {
       type: "list",
-      name: "newRoleDepartment",
+      name: "newRoleDepartmentName",
       message: "Please select a department for the new role:",
       choices: getCurrentDepartments(),
     }
   ]).then(answer => {
+    // ** check department name provided by user **
+    console.log("** department name is: **", answer.newRoleDepartmentName);
+    
+    // get id of new role department
+    let newRoleDepartmentId = db.query(`SELECT id FROM department WHERE name='${answer.newRoleDepartmentName}'`, function (err, result) {
+      if (err) {
+        console.log(err);
+      } 
+      console.log("** department id is: **");
+      console.log(result);
+      console.log(result[0].id);
+      return result[0].id;
+    });
+
+    // ** TODO: refactor getting department id above, as this returns undefined: **
+    console.log(newRoleDepartmentId);
+
     // add new role to db
-    db.query(`INSERT INTO role (title, salary) VALUES('${answer.newRoleTitle}', ${answer.newRoleSalary})`, function (err, results) {
+    db.query(`INSERT INTO role (title, salary, department_id) VALUES('${answer.newRoleTitle}', ${answer.newRoleSalary}), ${newRoleDepartmentId}`, function (err, results) {
       // handle error
       if (err) {
         console.log(err);
@@ -184,8 +201,9 @@ function addNewRole() {
   });
 }
 
+// helper function to get current departments in db
 function getCurrentDepartments() {
-  db.query(`SELECT name FROM department`, function (err, results) {
+  db.query(`SELECT id, name FROM department`, function (err, results) {
     if (err) {
       console.log(err);
       console.log("Could not get departments from db");
@@ -199,7 +217,6 @@ function getCurrentDepartments() {
   return currentDepartments;
 }
 
-
 // adds an employee to db
 // updates an employee role in db
 
@@ -207,9 +224,6 @@ function getCurrentDepartments() {
 function init() {
   console.log("\x1b[93;104m%s\x1b[0m", "\n/// Welcome to the employee management system! ///\n");
   main();
-  // getCurrentDepartments();
-  // console.log(`OUTER - currentDepartments are:`);
-  // console.log(currentDepartments);
 }
 
 init();
