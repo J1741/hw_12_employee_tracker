@@ -171,7 +171,22 @@ function addNewRole() {
     console.log("** department name is: **", answer.newRoleDepartmentName);
     
     // get id of new role department
-    let newRoleDepartmentId = db.query(`SELECT id FROM department WHERE name='${answer.newRoleDepartmentName}'`, function (err, result) {
+    // let newRoleDepartmentId = db.query(`SELECT id FROM department WHERE name='${answer.newRoleDepartmentName}'`, function (err, result) {
+    //   if (err) {
+    //     console.log(err);
+    //   } 
+    //   console.log("** department id is: **");
+    //   console.log(result);
+    //   console.log(result[0].id);
+    //   return result[0].id;
+    // });
+
+    // ** TODO: refactor getting department id above, as this returns undefined: **
+    // console.log(newRoleDepartmentId);
+
+    // REFACTORING  
+    // get department id
+    db.promise().query(`SELECT id FROM department WHERE name='${answer.newRoleDepartmentName}'`, function (err, result) {
       if (err) {
         console.log(err);
       } 
@@ -179,25 +194,25 @@ function addNewRole() {
       console.log(result);
       console.log(result[0].id);
       return result[0].id;
-    });
+    }).then(result => {
+      console.log("** returned dept id is: **", result)
+    })
 
-    // ** TODO: refactor getting department id above, as this returns undefined: **
-    console.log(newRoleDepartmentId);
 
     // add new role to db
-    db.query(`INSERT INTO role (title, salary, department_id) VALUES('${answer.newRoleTitle}', ${answer.newRoleSalary}), ${newRoleDepartmentId}`, function (err, results) {
-      // handle error
-      if (err) {
-        console.log(err);
-        console.log(`\x1b[93;41m%s\x1b[0m`, `\n** Something went wrong, please try again **`);
-        main();
-      } else {
-        // pretty print results
-        console.log(`\x1b[93;42;1m%s\x1b[0m`, `Success!`)
-        console.log(results);
-        main();
-      }
-    })
+    // db.query(`INSERT INTO role (title, salary, department_id) VALUES('${answer.newRoleTitle}', ${answer.newRoleSalary}), ${newRoleDepartmentId}`, function (err, results) {
+    //   // handle error
+    //   if (err) {
+    //     console.log(err);
+    //     console.log(`\x1b[93;41m%s\x1b[0m`, `\n** Something went wrong, please try again **`);
+    //     main();
+    //   } else {
+    //     // pretty print results
+    //     console.log(`\x1b[93;42;1m%s\x1b[0m`, `Success!`)
+    //     console.log(results);
+    //     main();
+    //   }
+    // })
   });
 }
 
