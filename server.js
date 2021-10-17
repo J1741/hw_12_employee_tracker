@@ -2,6 +2,8 @@ const inquirer = require('inquirer');
 const mysql = require('mysql2');
 const cTable = require('console.table');
 
+let currentDepartments = [];
+
 // connect to database
 const db = mysql.createConnection(
   {
@@ -157,6 +159,12 @@ function addNewRole() {
       type: "input",
       name: "newRoleSalary",
       message: "Please enter a salary for the new role:",
+    },
+    {
+      type: "list",
+      name: "newRoleDepartment",
+      message: "Please select a department for the new role:",
+      choices: getCurrentDepartments(),
     }
   ]).then(answer => {
     // add new role to db
@@ -180,25 +188,28 @@ function getCurrentDepartments() {
   db.query(`SELECT name FROM department`, function (err, results) {
     if (err) {
       console.log(err);
-      console.log("Could not get roles from db");
+      console.log("Could not get departments from db");
     } else {
-      // console.log(results);
-      let currentDepartments = results.map(result => result.name);
-      // console.log(`currentDepartments are:`);
-      // console.log(currentDepartments);
-      return currentDepartments;
+      // add each department name to currentDepartments array
+      for (let i = 0; i < results.length; i++) {
+        currentDepartments.push(results[i].name);
+      }
     }
-  })
+  });
+  return currentDepartments;
 }
-  
+
+
 // adds an employee to db
 // updates an employee role in db
 
 // welcomes user and runs app
 function init() {
   console.log("\x1b[93;104m%s\x1b[0m", "\n/// Welcome to the employee management system! ///\n");
-  // main();
-  getCurrentDepartments();
+  main();
+  // getCurrentDepartments();
+  // console.log(`OUTER - currentDepartments are:`);
+  // console.log(currentDepartments);
 }
 
 init();
