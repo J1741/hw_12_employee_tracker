@@ -76,7 +76,7 @@ function viewAllDepartments() {
       main();
     } else {
       // pretty print results
-      console.log(`\x1b[93;42;1m%s\x1b[0m`, `Success:`)
+      console.log(`\x1b[93;42;1m%s\x1b[0m`, `Success!`)
       console.table(results);
     }
     main();
@@ -93,7 +93,7 @@ function viewAllRoles() {
       main();
     } else {
       // pretty print results
-      console.log(`\x1b[93;42;1m%s\x1b[0m`, `Success:`)
+      console.log(`\x1b[93;42;1m%s\x1b[0m`, `Success!`)
       console.table(results);
     }
     main(); 
@@ -110,7 +110,7 @@ function viewAllEmployees() {
       main();
     } else {
       // pretty print results
-      console.log(`\x1b[93;42;1m%s\x1b[0m`, `Success:`)
+      console.log(`\x1b[93;42;1m%s\x1b[0m`, `Success!`)
       console.table(results);
     }
     main(); 
@@ -178,8 +178,7 @@ function addNewRole() {
           console.log(`\x1b[93;42;1m%s\x1b[0m`, `Success!`);
           console.log(`\x1b[92m%s\x1b[0m`, `New role added to database:\n - title: ${answer.newRoleTitle}\n - salary: ${answer.newRoleSalary}\n - id: ${result[0].insertId}\n`)
           main();
-        }
-      )
+        })
     })
   });
 }
