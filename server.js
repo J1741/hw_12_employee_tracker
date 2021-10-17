@@ -176,13 +176,29 @@ function addNewRole() {
   });
 }
 
+function getCurrentDepartments() {
+  db.query(`SELECT name FROM department`, function (err, results) {
+    if (err) {
+      console.log(err);
+      console.log("Could not get roles from db");
+    } else {
+      // console.log(results);
+      let currentDepartments = results.map(result => result.name);
+      // console.log(`currentDepartments are:`);
+      // console.log(currentDepartments);
+      return currentDepartments;
+    }
+  })
+}
+  
 // adds an employee to db
 // updates an employee role in db
 
 // welcomes user and runs app
 function init() {
   console.log("\x1b[93;104m%s\x1b[0m", "\n/// Welcome to the employee management system! ///\n");
-  main();
+  // main();
+  getCurrentDepartments();
 }
 
 init();
