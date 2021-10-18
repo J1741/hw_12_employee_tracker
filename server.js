@@ -4,6 +4,7 @@ const cTable = require('console.table');
 
 let currentDepartments = [];
 let currentRoles = [];
+let managerChoices = [];
 
 // connect to database
 const db = mysql.createConnection(
@@ -65,12 +66,13 @@ function main() {
     if (answer.dbAction === "Add an employee") {
       addNewEmployee();
     }
+
     // handle update an employee role
 
   });
 }
 
-// gets all departments in db
+// displays all departments in db
 function viewAllDepartments() {
   db.query("SELECT id AS 'department id', name AS 'department name' FROM department", function (err, results) {
     // handle error
@@ -87,7 +89,7 @@ function viewAllDepartments() {
   });
 }
 
-// gets all roles in db
+// displays all roles in db
 function viewAllRoles() {
   db.query("SELECT r.title AS 'job title', r.id AS 'role id', d.name AS 'department',r.salary FROM role r LEFT OUTER JOIN department d ON r.department_id = d.id", function (err, results) {
     // handle error
@@ -104,7 +106,7 @@ function viewAllRoles() {
   });
 }
 
-// gets all employees in db
+// displays all employees in db
 function viewAllEmployees() {
   db.query("SELECT ea.id AS 'employee id', ea.first_name AS 'first name', ea.last_name AS 'last name', r.title AS 'job title', d.name AS 'department', r.salary, CONCAT(eb.first_name, ' ', eb.last_name) AS 'manager' FROM employee ea LEFT OUTER JOIN employee eb ON ea.manager_id = eb.id JOIN role r ON ea.role_id=r.id JOIN department d ON d.id=r.department_id", function (err, results) {
     // handle error
@@ -171,11 +173,10 @@ function addNewRole() {
       choices: getCurrentDepartments(),
     }
   ]).then(answer => {
-  
     // add new role to db
-    // promisify to allow .then method and .then chaining
+    //  ** promisify to allow .then method and .then chaining **
     db.promise().query(`SELECT id FROM department WHERE name='${answer.newRoleDepartmentName}'`).then(result =>
-      // insert new role
+      // insert new role into db
       {db.promise().query(`INSERT INTO role (title, salary, department_id) VALUES('${answer.newRoleTitle}', ${answer.newRoleSalary}, ${result[0][0].id})`).then(result =>
         // pretty print results
         {
@@ -207,7 +208,7 @@ function getCurrentDepartments() {
 function addNewEmployee() {
   console.log("\n** in addNewEmployee function **\n");
   // ** REFACTORING for new employee **
-  // get new role info
+  // get new employee info
   inquirer.prompt([
     {
       type: "input",
@@ -229,7 +230,7 @@ function addNewEmployee() {
       type: "list",
       name: "newEmployeeManager",
       message: "Please select a manager for the new employee:",
-      choices: ["fakeManager1", "fakeManager2", "fakeManager3"],
+      choices: getManagerChoices(), 
     }
   ]).then(answer => {
     console.log("answers are:\n", answer);
@@ -245,8 +246,6 @@ function getCurrentRoles() {
       console.log("Could not get roles from db");
     } else {
       // add each role title to currentRoles array
-      // console.log("current roles in db are:", results);
-      // console.log("first role title is:", results[0].title);
       for (let i = 0; i < results.length; i++) {
         currentRoles.push(results[i].title);
       }
@@ -255,7 +254,21 @@ function getCurrentRoles() {
   return currentRoles;
 }
 
-// helper function to get current managers
+// helper function to get manager choices
+function getManagerChoices () {
+  db.query(`SELECT id,CONCAT(first_name, ' ', last_name) AS employeeFullName FROM employee`, function (err, results) {
+    if (err) {
+      console.log(err);
+      console.log("Could not get employees from db");
+    } else {
+      // add each employee full name title to managerChoices array
+      for (let i = 0; i < results.length; i++) {
+        managerChoices.push(results[i].employeeFullName);
+      }
+    }
+  });
+  return managerChoices;
+}
 
 // updates an employee role in db
 
@@ -263,7 +276,6 @@ function getCurrentRoles() {
 function init() {
   console.log("\x1b[93;104m%s\x1b[0m", "\n/// Welcome to the employee management system! ///\n");
   main();
-  // getCurrentRoles();
 }
 
 init();
