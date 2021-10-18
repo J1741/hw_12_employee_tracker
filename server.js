@@ -235,6 +235,9 @@ function addNewEmployee() {
   ]).then(answer => {
     console.log("answers are:\n", answer);
 
+    let managerNameArray = answer.newEmployeeManager.split(' ');
+    console.log("managerNameArray is:", managerNameArray);
+
     // add new employee to database
     db.promise().query(`SELECT id FROM role WHERE title='${answer.newEmployeeRole}'`).then(result => {
       db.promise().query(`INSERT INTO employee (first_name, last_name, role_id) VALUES('${answer.newEmployeeFirstName}', '${answer.newEmployeeLastName}', ${result[0][0].id})`).then(result => {
@@ -242,6 +245,7 @@ function addNewEmployee() {
         main();
       })
     })
+
   }); 
 } 
 
