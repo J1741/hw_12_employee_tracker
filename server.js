@@ -206,7 +206,7 @@ function getCurrentDepartments() {
 // adds an employee to db
 function addNewEmployee() {
   console.log("\n** in addNewEmployee function **\n");
-  // REFACTORING for new employee
+  // ** REFACTORING for new employee **
   // get new role info
   inquirer.prompt([
     {
@@ -223,7 +223,7 @@ function addNewEmployee() {
       type: "list",
       name: "newEmployeeRole",
       message: "Please select a role for the new employee:",
-      choices: ["fakeRole1", "fakeRole2", "fakeRole3"],
+      choices: getCurrentRoles(),
     },
     {
       type: "list",
@@ -238,6 +238,23 @@ function addNewEmployee() {
 } 
 
 // helper function to get current roles
+function getCurrentRoles() {
+  db.query(`SELECT id, title FROM role`, function (err, results) {
+    if (err) {
+      console.log(err);
+      console.log("Could not get roles from db");
+    } else {
+      // add each role title to currentRoles array
+      // console.log("current roles in db are:", results);
+      // console.log("first role title is:", results[0].title);
+      for (let i = 0; i < results.length; i++) {
+        currentRoles.push(results[i].title);
+      }
+    }
+  });
+  return currentRoles;
+}
+
 // helper function to get current managers
 
 // updates an employee role in db
@@ -246,6 +263,7 @@ function addNewEmployee() {
 function init() {
   console.log("\x1b[93;104m%s\x1b[0m", "\n/// Welcome to the employee management system! ///\n");
   main();
+  // getCurrentRoles();
 }
 
 init();
