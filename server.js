@@ -108,7 +108,7 @@ function viewAllRoles() {
 
 // displays all employees in db
 function viewAllEmployees() {
-  db.query("SELECT ea.id AS 'employee id', ea.first_name AS 'first name', ea.last_name AS 'last name', r.title AS 'job title', d.name AS 'department', r.salary, CONCAT(eb.first_name, ' ', eb.last_name) AS 'manager' FROM employee ea LEFT OUTER JOIN employee eb ON ea.manager_id = eb.id JOIN role r ON ea.role_id=r.id JOIN department d ON d.id=r.department_id", function (err, results) {
+  db.query("SELECT ea.id AS 'employee id', ea.first_name AS 'first name', ea.last_name AS 'last name', r.title AS 'job title', d.name AS 'department', r.salary, CONCAT(eb.first_name, ' ', eb.last_name) AS 'manager' FROM employee ea LEFT OUTER JOIN employee eb ON ea.manager_id = eb.id LEFT OUTER JOIN role r ON ea.role_id=r.id LEFT OUTER JOIN department d ON d.id=r.department_id", function (err, results) {
     // handle error
     if (err) {
       console.log(err);
@@ -175,15 +175,15 @@ function addNewRole() {
   ]).then(answer => {
     // add new role to db
     //  ** promisify to allow .then method and .then chaining **
-    db.promise().query(`SELECT id FROM department WHERE name='${answer.newRoleDepartmentName}'`).then(result =>
+    db.promise().query(`SELECT id FROM department WHERE name='${answer.newRoleDepartmentName}'`).then(result => {
       // insert new role into db
-      {db.promise().query(`INSERT INTO role (title, salary, department_id) VALUES('${answer.newRoleTitle}', ${answer.newRoleSalary}, ${result[0][0].id})`).then(result =>
-        // pretty print results
-        {
-          console.log(`\x1b[93;42;1m%s\x1b[0m`, `Success!`);
-          console.log(`\x1b[92m%s\x1b[0m`, `New role added to database:\n - title: ${answer.newRoleTitle}\n - salary: ${answer.newRoleSalary}\n - id: ${result[0].insertId}\n`)
-          main();
-        })
+      db.promise().query(`INSERT INTO role (title, salary, department_id) VALUES('${answer.newRoleTitle}', ${answer.newRoleSalary}, ${result[0][0].id})`).then(result =>
+      // pretty print results
+      {
+        console.log(`\x1b[93;42;1m%s\x1b[0m`, `Success!`);
+        console.log(`\x1b[92m%s\x1b[0m`, `New role added to database:\n - title: ${answer.newRoleTitle}\n - salary: ${answer.newRoleSalary}\n - id: ${result[0].insertId}\n`)
+        main();
+      })
     })
   });
 }
@@ -234,9 +234,13 @@ function addNewEmployee() {
     }
   ]).then(answer => {
     console.log("answers are:\n", answer);
-    db.promise().query(`INSERT INTO employee (first_name, last_name) VALUES('${answer.newEmployeeFirstName}', '${answer.newEmployeeLastName}')`).then(result => {
-      console.log("** add employee result is: **", result);
-      main();
+
+    // add new employee to database
+    db.promise().query(`SELECT id FROM role WHERE title='${answer.newEmployeeRole}'`).then(result => {
+      db.promise().query(`INSERT INTO employee (first_name, last_name, role_id) VALUES('${answer.newEmployeeFirstName}', '${answer.newEmployeeLastName}', ${result[0][0].id})`).then(result => {
+        console.log("insert employee result:", result);
+        main();
+      })
     })
   }); 
 } 
@@ -264,7 +268,7 @@ function getManagerChoices () {
       console.log(err);
       console.log("Could not get employees from db");
     } else {
-      // add each employee full name title to managerChoices array
+      // add each employee full name to managerChoices array
       for (let i = 0; i < results.length; i++) {
         managerChoices.push(results[i].employeeFullName);
       }
