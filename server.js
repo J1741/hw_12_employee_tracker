@@ -61,6 +61,9 @@ function main() {
     }
 
     // handle add an employee
+    if (answer.dbAction === "Add an employee") {
+      addNewEmployee();
+    }
     // handle update an employee role
 
   });
@@ -200,6 +203,11 @@ function getCurrentDepartments() {
 }
 
 // adds an employee to db
+function addNewEmployee() {
+  console.log("\n** in addNewEmployee function **\n");
+  main();
+} 
+
 // updates an employee role in db
 
 // welcomes user and runs app
