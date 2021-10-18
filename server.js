@@ -218,7 +218,7 @@ function addNewEmployee() {
     {
       type: "input",
       name: "newEmployeeLastName",
-      message: "Please enter th new employee's last name:",
+      message: "Please enter the new employee's last name:",
     },
     {
       type: "list",
@@ -234,7 +234,10 @@ function addNewEmployee() {
     }
   ]).then(answer => {
     console.log("answers are:\n", answer);
-    main();
+    db.promise().query(`INSERT INTO employee (first_name, last_name) VALUES('${answer.newEmployeeFirstName}', '${answer.newEmployeeLastName}')`).then(result => {
+      console.log("** add employee result is: **", result);
+      main();
+    })
   }); 
 } 
 
