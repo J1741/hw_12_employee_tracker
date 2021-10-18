@@ -3,6 +3,7 @@ const mysql = require('mysql2');
 const cTable = require('console.table');
 
 let currentDepartments = [];
+let currentRoles = [];
 
 // connect to database
 const db = mysql.createConnection(
@@ -205,8 +206,39 @@ function getCurrentDepartments() {
 // adds an employee to db
 function addNewEmployee() {
   console.log("\n** in addNewEmployee function **\n");
-  main();
+  // REFACTORING for new employee
+  // get new role info
+  inquirer.prompt([
+    {
+      type: "input",
+      name: "newEmployeeFirstName",
+      message: "Please enter the new employee's first name:",
+    },
+    {
+      type: "input",
+      name: "newEmployeeLastName",
+      message: "Please enter th new employee's last name:",
+    },
+    {
+      type: "list",
+      name: "newEmployeeRole",
+      message: "Please select a role for the new employee:",
+      choices: ["fakeRole1", "fakeRole2", "fakeRole3"],
+    },
+    {
+      type: "list",
+      name: "newEmployeeManager",
+      message: "Please select a manager for the new employee:",
+      choices: ["fakeManager1", "fakeManager2", "fakeManager3"],
+    }
+  ]).then(answer => {
+    console.log("answers are:\n", answer);
+    main();
+  }); 
 } 
+
+// helper function to get current roles
+// helper function to get current managers
 
 // updates an employee role in db
 
