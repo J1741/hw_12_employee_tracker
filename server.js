@@ -35,7 +35,6 @@ function main() {
       ], 
     }
   ]).then((answer) => {
-    console.log("dbAction is:", answer);
    
     // handle view all departments
     if (answer.dbAction === "View all departments") {
@@ -128,7 +127,6 @@ function viewAllEmployees() {
 
 // adds a new department to db
 function addNewDepartment() {
-  console.log("\n ** IN addNewDepartment function **\n");
   // get new dept info
   inquirer.prompt([
     {
@@ -156,7 +154,6 @@ function addNewDepartment() {
 
 // adds a new role to db
 function addNewRole() {
-  console.log("\n ** IN addNewRole function **\n");
   // get new role info
   inquirer.prompt([
     {
@@ -177,7 +174,7 @@ function addNewRole() {
     }
   ]).then(answer => {
     // add new role to db
-    //  ** promisify to allow .then method and .then chaining **
+    // ** promisify to allow .then method and .then chaining **
     db.promise().query(`SELECT id FROM department WHERE name='${answer.newRoleDepartmentName}'`).then(result => {
       // insert new role into db
       db.promise().query(`INSERT INTO role (title, salary, department_id) VALUES('${answer.newRoleTitle}', ${answer.newRoleSalary}, ${result[0][0].id})`).then(result =>
@@ -209,8 +206,6 @@ function getCurrentDepartments() {
 
 // adds an employee to db
 function addNewEmployee() {
-  console.log("\n** in addNewEmployee function **\n");
-  // ** REFACTORING for new employee **
   // get new employee info
   inquirer.prompt([
     {
@@ -286,7 +281,6 @@ function getManagerChoices() {
 }
 
 // updates an employee role in db
-// ** function to be added **
 function updateEmployeeRole() {
   console.log(`\x1b[30;103;1m%s\x1b[0m`, `This feature is not available yet\n`);
   main();
