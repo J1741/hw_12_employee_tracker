@@ -5,6 +5,7 @@ const cTable = require('console.table');
 let currentDepartments = [];
 let currentRoles = [];
 let managerChoices = [];
+// let managerId = [];
 
 // connect to database
 const db = mysql.createConnection(
@@ -236,16 +237,17 @@ function addNewEmployee() {
     console.log("answers are:\n", answer);
 
     let managerNameArray = answer.newEmployeeManager.split(' ');
-    console.log("managerNameArray is:", managerNameArray);
-
-    // add new employee to database
+    console.log("managerNameArray is:", managerNameArray)
+  
+    // add an employee to the database (NB: manager id set to null)
     db.promise().query(`SELECT id FROM role WHERE title='${answer.newEmployeeRole}'`).then(result => {
       db.promise().query(`INSERT INTO employee (first_name, last_name, role_id) VALUES('${answer.newEmployeeFirstName}', '${answer.newEmployeeLastName}', ${result[0][0].id})`).then(result => {
-        console.log("insert employee result:", result);
+        // pretty print results
+        console.log(`\x1b[93;42;1m%s\x1b[0m`, `Success!`);
+        console.log(`\x1b[92m%s\x1b[0m`, `New employee added to database:\n - first name: ${answer.newEmployeeFirstName}\n - last name: ${answer.newEmployeeLastName}\n - id: ${result[0].insertId}\n`);
         main();
       })
     })
-
   }); 
 } 
 
@@ -282,6 +284,7 @@ function getManagerChoices () {
 }
 
 // updates an employee role in db
+// ** function to be added **
 
 // welcomes user and runs app
 function init() {
