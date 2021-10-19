@@ -5,7 +5,6 @@ const cTable = require('console.table');
 let currentDepartments = [];
 let currentRoles = [];
 let managerChoices = [];
-// let managerId = [];
 
 // connect to database
 const db = mysql.createConnection(
@@ -69,6 +68,9 @@ function main() {
     }
 
     // handle update an employee role
+    if (answer.dbAction === "Update an employee role") {
+      updateEmployeeRole();
+    }
 
   });
 }
@@ -268,7 +270,7 @@ function getCurrentRoles() {
 }
 
 // helper function to get manager choices
-function getManagerChoices () {
+function getManagerChoices() {
   db.query(`SELECT id,CONCAT(first_name, ' ', last_name) AS employeeFullName FROM employee`, function (err, results) {
     if (err) {
       console.log(err);
@@ -285,6 +287,10 @@ function getManagerChoices () {
 
 // updates an employee role in db
 // ** function to be added **
+function updateEmployeeRole() {
+  console.log(`\x1b[30;103;1m%s\x1b[0m`, `This feature is not available yet\n`);
+  main();
+}
 
 // welcomes user and runs app
 function init() {
