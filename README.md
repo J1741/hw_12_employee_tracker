@@ -1,8 +1,10 @@
 # Employee Tracker
 ## Description
-Employee Tracker is a command line interface application that allows users to track and manage an organization's departments, roles, and employees in a MySQL database.
+Employee Tracker is an application that allows users to track and manage an organization's departments, roles, and employees in a MySQL database via a command-line interface (CLI).
 
-Technologies used by the application include the `mysql2`, `inquirer`, and `console.table` npm packages. Detailed installation requirements, steps, and usage instructions are provided below.
+Technologies used by the application include the `mysql2`, `inquirer`, and `console.table` npm packages, as well as `Node.js` and `MySQL`. Detailed installation requirements, steps, and usage instructions are provided below.
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## Table of Contents
 - [Installation](#installation)
@@ -14,7 +16,10 @@ Technologies used by the application include the `mysql2`, `inquirer`, and `cons
 
 ## Installation
 ### Requirements
-Before installing the application, be sure you have installed `Node.js` JavaScript runtime, `npm` package manager, and have a local MySQL server running. For more information, please visit https://nodejs.org, https://www.npmjs.com, and https://www.mysql.com
+Before installing the application, be sure you have installed `Node.js` JavaScript runtime, `npm` package manager, and are  running a local `MySQL` server. For more information on these prerequisite technologies, see:
+- `Node.js`: https://nodejs.org
+- `npm`: https://www.npmjs.com,
+- `MySQL`: https://www.mysql.com
 
 ### Steps
 Step 1. Clone the project repo here: https://github.com/J1741/hw_12_employee_tracker
@@ -24,12 +29,12 @@ Step 2. Run the following command in the root of the project directory to instal
 npm i
 ```
 
-Step 3. Run the following command in the root of the project directory to create the employee_management_db database:
+Step 3. Run the following command in the root of the project directory to create the `employee_management_db` database:
 ```
 source db/schema.sql
 ```
 
-Step 4. OPTIONAL: Run the following command in the root of the project directory to to seed the database:
+Step 4. OPTIONAL: Run the following command in the root of the project directory to to seed the `employee_management_db` database:
 ```
 source db/seeds.sql
 ```
@@ -44,9 +49,9 @@ Step 2. Run the following command there:
 node server.js
 ```
 
-Step 3. While the application is running, follow the prompts in the terminal to view and manage the departments, roles, and employees in the employee_management_db
+Step 3. While the application is running, select menu options and follow the prompts in the CLI to view and manage departments, roles, and employees in the `employee_management_db`
 
-Step 4. To exit the application, hit CTRL-C to exit the Employee Tracker and return to a regular terminal prompt.
+Step 4. When you are finished running the application, hit CTRL-C on the keyboard. This will exit the Employee Tracker and return to a regular terminal prompt.
 
 ## License
 Copyright (c) 2021 J1741
