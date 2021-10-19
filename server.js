@@ -231,10 +231,8 @@ function addNewEmployee() {
       choices: getManagerChoices(), 
     }
   ]).then(answer => {
-    console.log("answers are:\n", answer);
 
     let managerNameArray = answer.newEmployeeManager.split(' ');
-    console.log("managerNameArray is:", managerNameArray)
   
     // add an employee to the database (NB: manager id set to null)
     db.promise().query(`SELECT id FROM role WHERE title='${answer.newEmployeeRole}'`).then(result => {
